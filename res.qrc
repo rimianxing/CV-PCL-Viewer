@@ -1,0 +1,36 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/about.png</file>
+        <file>images/add.png</file>
+        <file>images/binarization.png</file>
+        <file>images/dragon.png</file>
+        <file>images/edge_detector.png</file>
+        <file>images/gamma.png</file>
+        <file>images/gray.png</file>
+        <file>images/h_flip.png</file>
+        <file>images/language.png</file>
+        <file>images/loading.gif</file>
+        <file>images/mean_filter.png</file>
+        <file>images/mosaic.png</file>
+        <file>images/next.png</file>
+        <file>images/open_picture.png</file>
+        <file>images/open_video.png</file>
+        <file>images/prev.png</file>
+        <file>images/save.png</file>
+        <file>images/slider.png</file>
+        <file>images/smooth.png</file>
+        <file>images/src_image.png</file>
+        <file>images/start_play.png</file>
+        <file>images/stop_play.png</file>
+        <file>images/toolbox.png</file>
+        <file>images/turn_left.png</file>
+        <file>images/turn_right.png</file>
+        <file>images/v_flip.png</file>
+        <file>other_files/en_US.qm</file>
+        <file>other_files/en_US.ts</file>
+        <file>other_files/zh_CN.qm</file>
+        <file>other_files/zh_CN.ts</file>
+        <file>images/background.png</file>
+        <file>images/water_mark.png</file>
+    </qresource>
+</RCC>
