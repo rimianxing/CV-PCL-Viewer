@@ -13,7 +13,7 @@ Welcome to the Multifunctional Image and Video Processing Tool! This software ha
 - Cmake 3.30.0
 - OpenCV 4.0.1
 
-You can refer to this article for the installation of the environment: [Installation tutorial](https://blog.csdn.net/weixin_42322013/article/details/88808230)
+You can refer to this article for the installation of the environment: [Installation tutorial](https://blog.csdn.net/weixin_42322013/article/details/88808230).
 
 >**Note:** when you run this software and find that the video cannot be opened, place these two files (**opencv_ffmpeg.dll** and **opencv_ffmpeg_64.dll**) in the **reference** folder to the OpenCV build folder, such as mine: "D:\opencv-4.0.1\build\3rdparty\ffmpeg", then recompile OpenCV, after that it will work.
 
