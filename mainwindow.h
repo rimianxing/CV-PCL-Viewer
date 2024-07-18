@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -10,8 +10,40 @@
 #include <QImage>
 #include <QMessageBox>
 #include <QTranslator>
-using namespace cv;
 
+#include <pcl/ModelCoefficients.h>
+#include <pcl/PolygonMesh.h>
+#include <pcl/Vertices.h>
+#include <pcl/common/io.h>
+#include <pcl/common/transforms.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/features/normal_3d_omp.h>
+#include <pcl/search/kdtree.h>
+#include <pcl/surface/gp3.h>
+#include <pcl/surface/poisson.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/visualization/common/common.h>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <boost/thread/thread.hpp>
+
+#include <vtkAutoInit.h>
+#include <QVTKOpenGLNativeWidget.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkPNGWriter.h>
+#include <vtkPointPicker.h>
+#include <vtkRenderWindow.h>
+#include <vtkWindowToImageFilter.h>
+
+#include "Tools.h"
+#include "FileIO.h"
+#include "MyCloud.h"
+
+using std::map;
+using std::string;
+using std::vector;
 
 namespace Ui {
 class MainWindow;
@@ -40,6 +72,7 @@ public:
     QImage adjustSaturation(cv::Mat& image, int value);//调整饱和度
     QImage adjustHighlight(cv::Mat& image, int value);//调整高光
     QImage adjustShadow(cv::Mat& image, int value);//调整阴影
+    void createMesh(PointCloudT::Ptr cloud, pcl::PolygonMesh::Ptr mesh);
 
 private slots:
     void onTimeout();
@@ -48,21 +81,11 @@ private slots:
 
     void on_actionImage_triggered();
 
+    void on_actionSaveImage_triggered();
+
     void on_actionVideo_triggered();
 
     void on_actionTool_triggered();
-
-    void on_actionSaveImage_triggered();
-
-    void on_actionGray_triggered();
-
-    void on_actionMeanFilter_triggered();
-
-    void on_actionEdge_triggered();
-
-    void on_actionWith_triggered();
-
-    void on_actionGamma_triggered();
 
     void on_actionLanguage_triggered();
 
@@ -128,6 +151,24 @@ private slots:
 
     void on_btnSmooth_clicked();
 
+    void on_actionPointCloud_triggered();
+
+    void on_actionSaveCloud_triggered();
+
+    void on_btnSaveCloud_clicked();
+
+    void on_sliderPointSize_valueChanged(int value);
+
+    void on_btnPoint_clicked();
+
+    void on_btnMeshSurface_clicked();
+
+    void on_btnMeshWire_clicked();
+
+    void on_btnPointMesh_clicked();
+
+    void on_btnCreateMesh_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTranslator *m_translator;
@@ -141,13 +182,20 @@ private:
     int imageType = 0;//图片处理类型
     cv::Mat sliderImage;//滑动条调整前的图片
     QString videoPath;//视频路径
-    VideoCapture capture; //用来读取视频结构
+    cv::VideoCapture capture; //用来读取视频结构
     QTimer timer;//视频播放的定时器
     int speed;//调节播放速率
     int delay;//帧延迟时间
     QMessageBox customMsgBox;//关于
     QIcon iconStartPlay = QIcon(":/images/start_play.png");
     QIcon iconStopPlay = QIcon(":/images/stop_play.png");
+    QString imageDir = "/";
+    QString videoDir = "/";
+
+    MyCloud myCloud;
+    std::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
+    FileIO fileIO;
+    bool withMesh = false;
 };
 
 #endif // MAINWINDOW_H

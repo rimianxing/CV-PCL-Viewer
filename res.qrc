@@ -16,7 +16,7 @@
         <file>images/open_picture.png</file>
         <file>images/open_video.png</file>
         <file>images/prev.png</file>
-        <file>images/save.png</file>
+        <file>images/save_image.png</file>
         <file>images/slider.png</file>
         <file>images/smooth.png</file>
         <file>images/src_image.png</file>
@@ -26,11 +26,18 @@
         <file>images/turn_left.png</file>
         <file>images/turn_right.png</file>
         <file>images/v_flip.png</file>
+        <file>images/background.png</file>
+        <file>images/water_mark.png</file>
+        <file>images/open_pointcloud.png</file>
+        <file>images/save_pointcloud.png</file>
+        <file>images/mesh_wire.png</file>
+        <file>images/mesh_surface.png</file>
+        <file>images/point.png</file>
+        <file>images/point_mesh.png</file>
+        <file>images/create_mesh.png</file>
         <file>other_files/en_US.qm</file>
         <file>other_files/en_US.ts</file>
         <file>other_files/zh_CN.qm</file>
         <file>other_files/zh_CN.ts</file>
-        <file>images/background.png</file>
-        <file>images/water_mark.png</file>
     </qresource>
 </RCC>

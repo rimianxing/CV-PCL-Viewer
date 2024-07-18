@@ -41,7 +41,6 @@ color:black;
      <widget class="QTabWidget" name="tabWidget">
       <property name="font">
        <font>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -52,7 +51,7 @@ color:black;
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -60,7 +59,7 @@ color:black;
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
-         <widget class="QWidget" name="widget" native="true">
+         <widget class="QWidget" name="imageWidget" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_11">
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -379,7 +378,6 @@ QPushButton:pressed {
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -399,7 +397,7 @@ QPushButton:pressed {
                  </property>
                  <property name="icon">
                   <iconset resource="res.qrc">
-                   <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+                   <normaloff>:/images/save_image.png</normaloff>:/images/save_image.png</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -435,7 +433,6 @@ QPushButton:pressed {
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -472,7 +469,7 @@ QPushButton:pressed {
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QWidget" name="label_widget" native="true">
+         <widget class="QWidget" name="videoWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -580,7 +577,6 @@ QSlider::sub-page:horizontal {
              </property>
              <property name="font">
               <font>
-               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -640,7 +636,6 @@ QSlider::sub-page:horizontal {
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
-                     <weight>75</weight>
                      <bold>true</bold>
                     </font>
                    </property>
@@ -693,7 +688,6 @@ QPushButton:pressed {
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
-                     <weight>75</weight>
                      <bold>true</bold>
                     </font>
                    </property>
@@ -750,7 +744,6 @@ QPushButton:pressed {
                    <property name="font">
                     <font>
                      <pointsize>9</pointsize>
-                     <weight>75</weight>
                      <bold>true</bold>
                     </font>
                    </property>
@@ -781,7 +774,6 @@ QPushButton:pressed {
                    </property>
                    <property name="font">
                     <font>
-                     <weight>75</weight>
                      <bold>true</bold>
                     </font>
                    </property>
@@ -913,7 +905,6 @@ border:none;</string>
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -966,7 +957,6 @@ QPushButton:pressed {
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1019,7 +1009,6 @@ QPushButton:pressed {
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1072,7 +1061,6 @@ QPushButton:pressed {
                  <property name="font">
                   <font>
                    <pointsize>10</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1124,6 +1112,579 @@ QPushButton:pressed {
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>点云处理</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_21">
+        <item>
+         <widget class="QWidget" name="pointcloudWidget" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout_22">
+           <item>
+            <spacer name="horizontalSpacer_16">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QVTKOpenGLNativeWidget" name="labelPointCloud" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>1080</width>
+                 <height>720</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>1080</width>
+                 <height>720</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <property name="spacing">
+                <number>10</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <item>
+                  <widget class="QLabel" name="labelPointSize1">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>70</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>70</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>9</pointsize>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string> 尺寸：</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="labelPointSize2">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>40</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>40</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>9</pointsize>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSlider" name="sliderPointSize">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>150</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>150</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QSlider::groove:horizontal {
+	height: 10px;
+	background: #e67e22;
+}
+QSlider::handle:Horizontal 
+{
+     height: 20px;
+     width: 20px;
+     border-image: url(:/images/slider.png);
+     margin: -12 12px;
+}
+QSlider::add-page:horizontal {
+    background: white;
+}
+QSlider::sub-page:horizontal {
+    background: #e67e22;
+}</string>
+                   </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>10</number>
+                   </property>
+                   <property name="value">
+                    <number>1</number>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnPoint">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* 正常状态 */
+	background-color: rgba(255, 255, 255, 100);
+}
+
+QPushButton:pressed {
+    /* 鼠标按下状态 */
+    background-color: rgb(0, 255, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>点云</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="res.qrc">
+                   <normaloff>:/images/point.png</normaloff>:/images/point.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>35</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnMeshSurface">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* 正常状态 */
+	background-color: rgba(255, 255, 255, 100);
+}
+
+QPushButton:pressed {
+    /* 鼠标按下状态 */
+    background-color: rgb(0, 255, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>网格面片</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="res.qrc">
+                   <normaloff>:/images/mesh_surface.png</normaloff>:/images/mesh_surface.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>35</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnMeshWire">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* 正常状态 */
+	background-color: rgba(255, 255, 255, 100);
+}
+
+QPushButton:pressed {
+    /* 鼠标按下状态 */
+    background-color: rgb(0, 255, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>网格线框</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="res.qrc">
+                   <normaloff>:/images/mesh_wire.png</normaloff>:/images/mesh_wire.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>35</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnPointMesh">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* 正常状态 */
+	background-color: rgba(255, 255, 255, 100);
+}
+
+QPushButton:pressed {
+    /* 鼠标按下状态 */
+    background-color: rgb(0, 255, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>叠加显示</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="res.qrc">
+                   <normaloff>:/images/point_mesh.png</normaloff>:/images/point_mesh.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>35</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnCreateMesh">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* 正常状态 */
+	background-color: rgba(255, 255, 255, 100);
+}
+
+QPushButton:pressed {
+    /* 鼠标按下状态 */
+    background-color: rgb(0, 255, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>生成网格</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="res.qrc">
+                   <normaloff>:/images/create_mesh.png</normaloff>:/images/create_mesh.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>35</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <property name="spacing">
+                <number>40</number>
+               </property>
+               <item>
+                <spacer name="horizontalSpacer_11">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnSaveCloud">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>150</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* 正常状态 */
+	background-color: rgba(255, 255, 255, 100);
+}
+
+QPushButton:pressed {
+    /* 鼠标按下状态 */
+    background-color: rgb(0, 255, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>保存点云</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="res.qrc">
+                   <normaloff>:/images/save_pointcloud.png</normaloff>:/images/save_pointcloud.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>35</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="markBinary">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>100</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>二进制</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_15">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_17">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -1138,31 +1699,40 @@ QPushButton:pressed {
    <addaction name="actionImage"/>
    <addaction name="actionSaveImage"/>
    <addaction name="actionVideo"/>
-   <addaction name="separator"/>
-   <addaction name="actionGray"/>
-   <addaction name="actionMeanFilter"/>
-   <addaction name="actionEdge"/>
-   <addaction name="actionWith"/>
-   <addaction name="actionGamma"/>
+   <addaction name="actionPointCloud"/>
+   <addaction name="actionSaveCloud"/>
    <addaction name="separator"/>
    <addaction name="actionTool"/>
    <addaction name="actionLanguage"/>
    <addaction name="separator"/>
    <addaction name="actionAbout"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
-     <width>181</width>
+     <width>180</width>
      <height>651</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>180</width>
+     <height>524287</height>
     </size>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgba(255, 255, 255, 100);</string>
    </property>
    <property name="windowTitle">
-    <string> 工具箱</string>
+    <string>工具箱</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
@@ -1238,7 +1808,6 @@ QPushButton:pressed {
           <font>
            <family>Adobe 宋体 Std L</family>
            <pointsize>10</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1286,7 +1855,6 @@ QPushButton:pressed {
          <property name="font">
           <font>
            <pointsize>10</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1334,7 +1902,6 @@ QPushButton:pressed {
          <property name="font">
           <font>
            <pointsize>10</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1382,7 +1949,6 @@ QPushButton:pressed {
          <property name="font">
           <font>
            <pointsize>10</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1430,7 +1996,6 @@ QPushButton:pressed {
          <property name="font">
           <font>
            <pointsize>10</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1536,7 +2101,6 @@ QSlider::sub-page:horizontal {
            <property name="font">
             <font>
              <pointsize>9</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -1568,7 +2132,6 @@ QSlider::sub-page:horizontal {
            <property name="font">
             <font>
              <pointsize>9</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
@@ -1602,7 +2165,6 @@ QSlider::sub-page:horizontal {
          <property name="font">
           <font>
            <pointsize>10</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1884,6 +2446,10 @@ QPushButton:pressed {
     <addaction name="actionSaveImage"/>
     <addaction name="separator"/>
     <addaction name="actionVideo"/>
+    <addaction name="separator"/>
+    <addaction name="actionPointCloud"/>
+    <addaction name="separator"/>
+    <addaction name="actionSaveCloud"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -1900,35 +2466,26 @@ QPushButton:pressed {
     <addaction name="separator"/>
     <addaction name="actionLanguage"/>
    </widget>
-   <widget class="QMenu" name="menuFilter">
-    <property name="title">
-     <string>滤镜(&amp;L)</string>
-    </property>
-    <addaction name="actionGray"/>
-    <addaction name="separator"/>
-    <addaction name="actionMeanFilter"/>
-    <addaction name="separator"/>
-    <addaction name="actionEdge"/>
-    <addaction name="separator"/>
-    <addaction name="actionWith"/>
-    <addaction name="separator"/>
-    <addaction name="actionGamma"/>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuFilter"/>
    <addaction name="menuTool"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QDockWidget" name="dockWidget_2">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
-     <width>172</width>
+     <width>180</width>
      <height>601</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>172</width>
+     <width>180</width>
      <height>524287</height>
     </size>
    </property>
@@ -2004,7 +2561,6 @@ QPushButton:pressed {
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2038,7 +2594,6 @@ QPushButton:pressed {
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2140,7 +2695,6 @@ QSlider::sub-page:horizontal {
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2172,7 +2726,6 @@ QSlider::sub-page:horizontal {
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2273,7 +2826,6 @@ QSlider::sub-page:horizontal {
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2304,7 +2856,6 @@ QSlider::sub-page:horizontal {
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2408,7 +2959,6 @@ QSlider::sub-page:horizontal {
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2439,7 +2989,6 @@ QSlider::sub-page:horizontal {
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2544,7 +3093,6 @@ QSlider::sub-page:horizontal {
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2576,7 +3124,6 @@ QSlider::sub-page:horizontal {
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2678,7 +3225,6 @@ QSlider::sub-page:horizontal {
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2710,7 +3256,6 @@ QSlider::sub-page:horizontal {
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2811,7 +3356,6 @@ QSlider::sub-page:horizontal {
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2842,7 +3386,6 @@ QSlider::sub-page:horizontal {
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -2950,7 +3493,7 @@ QSlider::sub-page:horizontal {
   <action name="actionSaveImage">
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+     <normaloff>:/images/save_image.png</normaloff>:/images/save_image.png</iconset>
    </property>
    <property name="text">
     <string>保存图片(&amp;S)</string>
@@ -3007,81 +3550,6 @@ QSlider::sub-page:horizontal {
     <string>Ctrl+V</string>
    </property>
   </action>
-  <action name="actionGray">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/images/gray.png</normaloff>:/images/gray.png</iconset>
-   </property>
-   <property name="text">
-    <string>灰度化(&amp;G)</string>
-   </property>
-   <property name="toolTip">
-    <string>灰度化</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+G</string>
-   </property>
-  </action>
-  <action name="actionMeanFilter">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/images/mean_filter.png</normaloff>:/images/mean_filter.png</iconset>
-   </property>
-   <property name="text">
-    <string>均值滤波(&amp;M)</string>
-   </property>
-   <property name="toolTip">
-    <string>均值滤波</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+M</string>
-   </property>
-  </action>
-  <action name="actionEdge">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/images/edge_detector.png</normaloff>:/images/edge_detector.png</iconset>
-   </property>
-   <property name="text">
-    <string>边缘检测(&amp;E)</string>
-   </property>
-   <property name="toolTip">
-    <string>边缘检测</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+E</string>
-   </property>
-  </action>
-  <action name="actionWith">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/images/add.png</normaloff>:/images/add.png</iconset>
-   </property>
-   <property name="text">
-    <string>边缘+原图(&amp;W)</string>
-   </property>
-   <property name="toolTip">
-    <string>边缘+原图</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+W</string>
-   </property>
-  </action>
-  <action name="actionGamma">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/images/gamma.png</normaloff>:/images/gamma.png</iconset>
-   </property>
-   <property name="text">
-    <string>伽马变换(&amp;G)</string>
-   </property>
-   <property name="toolTip">
-    <string>伽马变换</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+G</string>
-   </property>
-  </action>
   <action name="actionTool">
    <property name="icon">
     <iconset resource="res.qrc">
@@ -3097,8 +3565,52 @@ QSlider::sub-page:horizontal {
     <string>Ctrl+B</string>
    </property>
   </action>
+  <action name="actionPointCloud">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/open_pointcloud.png</normaloff>:/images/open_pointcloud.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开点云(&amp;P)</string>
+   </property>
+   <property name="toolTip">
+    <string>打开点云</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="actionSaveCloud">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/images/save_pointcloud.png</normaloff>:/images/save_pointcloud.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存点云(&amp;F)</string>
+   </property>
+   <property name="toolTip">
+    <string>保存点云</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::TextHeuristicRole</enum>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QVTKOpenGLNativeWidget</class>
+   <extends>QWidget</extends>
+   <header>QVTKOpenGLNativeWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="res.qrc"/>
  </resources>

@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QToolButton>
 #include <QApplication>
@@ -23,16 +23,16 @@ using namespace std;
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-using namespace cv;
 #include <QTimer>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/types_c.h>
 #include "opencv2/imgproc/imgproc_c.h"///for cvSmooth
+#pragma execution_character_set("utf-8")
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow), speed(1), delay(0)
 {
-    ui->setupUi(this);          
+    ui->setupUi(this);
     ui->btnPrev->setDisabled(true);
     ui->btnNext->setDisabled(true);
 
@@ -42,13 +42,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowFlags(windowFlags()&~Qt::WindowMaximizeButtonHint);    // 禁止最大化按钮
     setFixedSize(this->width(), this->height());                     // 禁止拖动窗口大小
-
-    QLabel *permanent = new QLabel(this);
-    permanent->setObjectName("status");
-    permanent->setFrameStyle(QFrame::Box|QFrame::Sunken);
-    permanent->setText(tr("欢迎使用！"));
-    ui->statusBar->addPermanentWidget(permanent);
     ui->tabWidget->setCurrentIndex(0);
+
+    // 点云初始化
+    myCloud.cloud.reset(new PointCloudT);
+    myCloud.cloud->resize(1);
+    myCloud.mesh.reset(new pcl::PolygonMesh);
+    auto renderer = vtkSmartPointer<vtkRenderer>::New();
+    auto renderer2 = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+    renderer2->AddRenderer(renderer);
+    viewer.reset(new pcl::visualization::PCLVisualizer(renderer, renderer2, "viewer", false));
+    ui->labelPointCloud->setRenderWindow(viewer->getRenderWindow());
+    viewer->setupInteractor(ui->labelPointCloud->interactor(), ui->labelPointCloud->renderWindow());
+    ui->labelPointCloud->update();
+    ui->labelPointCloud->renderWindow()->Render();
+    ui->btnPoint->setDisabled(true);
+    ui->btnMeshSurface->setDisabled(true);
+    ui->btnMeshWire->setDisabled(true);
+    ui->btnPointMesh->setDisabled(true);
 }
 
 MainWindow::~MainWindow()
@@ -110,7 +121,7 @@ QImage MainWindow::srcWithEdge(cv::Mat& image, double value) {
     for (int i = 0; i < image.rows; ++i) {
         for (int j = 0; j < image.cols; ++j) {
             for (int c = 0; c < 3; ++c) {
-                image.at<Vec3b>(i, j)[c] = edge.at<uchar>(i, j) * value + image.at<Vec3b>(i, j)[c] * (1 - value);
+                image.at<cv::Vec3b>(i, j)[c] = edge.at<uchar>(i, j) * value + image.at<cv::Vec3b>(i, j)[c] * (1 - value);
             }
         }
     }
@@ -128,13 +139,15 @@ QImage MainWindow::gammaTransform(cv::Mat& image, double value) {
 }
 
 void MainWindow::on_actionImage_triggered() {
-    QStringList srcImagePathList_ = QFileDialog::getOpenFileNames(this, tr("选择图片"), "/", tr("图片(*.jpg *.jpeg *.png *.bmp *.tif)"));
+    QStringList srcImagePathList_ = QFileDialog::getOpenFileNames(this, tr("选择图片"), imageDir, tr("图片(*.jpg *.jpeg *.png *.bmp *.tif)"));
     if(srcImagePathList_.size() > 0){
         imageType = 0;
         ui->tabWidget->setCurrentIndex(0);
         srcImagePathList = srcImagePathList_;
         index = 0;
         QString src = srcImagePathList.at(index);
+        QFileInfo fileInfo(src);
+        imageDir = fileInfo.path();
         QImage image(src);
         image = image.convertToFormat(QImage::Format_RGB888);
         QImage Image = adjustScaleFactor(image, ui->labelImageShow);
@@ -146,10 +159,6 @@ void MainWindow::on_actionImage_triggered() {
         QImage images = adjustScaleFactor(image, ui->labelFirst);
         ui->labelFirst->setPixmap(QPixmap::fromImage(images));
         ui->labelFirst->setAlignment(Qt::AlignCenter);
-
-        //状态栏显示图片路径
-        QLabel *label = ui->statusBar->findChild<QLabel *>("status");
-        label->setText(src);
     }
     if(srcImagePathList_.size() >= 3){
         QString src1 = srcImagePathList.at((index+1) % srcImagePathList.size());
@@ -187,11 +196,6 @@ void MainWindow::on_actionImage_triggered() {
     }
 }
 
-void MainWindow::on_actionTool_triggered() {
-    ui->dockWidget->show();
-    ui->dockWidget_2->show();
-}
-
 void MainWindow::on_actionSaveImage_triggered() {
     //要加水印
     if(ui->mark->isChecked()){
@@ -218,7 +222,7 @@ void MainWindow::on_actionSaveImage_triggered() {
             }
 
             //选择保存路径
-            QString filename = QFileDialog::getSaveFileName(this, tr("保存图片"), "/", tr("*.jpg;; *.jpeg;; *.png;; *.bmp;; *.tif"));
+            QString filename = QFileDialog::getSaveFileName(this, tr("保存图片"), imageDir, tr("*.jpg;; *.jpeg;; *.png;; *.bmp;; *.tif"));
             if (!filename.isEmpty()) {
                 if (!(processedImage.save(filename))) { //保存图像
                     QMessageBox::warning(nullptr, tr("提示"), tr("图片保存失败！"), QMessageBox::Ok);
@@ -232,7 +236,7 @@ void MainWindow::on_actionSaveImage_triggered() {
     } else { //不加水印
         if (!processedImage.isNull()) {
             //选择保存路径
-            QString filename = QFileDialog::getSaveFileName(this, tr("保存图片"), "/", tr("*.jpg;; *.jpeg;; *.png;; *.bmp;; *.tif"));
+            QString filename = QFileDialog::getSaveFileName(this, tr("保存图片"), imageDir, tr("*.jpg;; *.jpeg;; *.png;; *.bmp;; *.tif"));
             if (!filename.isEmpty()) {
                 if (!(processedImage.save(filename))) { //保存图像
                     QMessageBox::warning(nullptr, tr("提示"), tr("图片保存失败！"), QMessageBox::Ok);
@@ -246,69 +250,9 @@ void MainWindow::on_actionSaveImage_triggered() {
     }
 }
 
-void MainWindow::on_actionGray_triggered() {
-    if (!srcImagePath.isEmpty()) {
-        imageType = 0;
-        cv::Mat image = cv::imread(srcImagePath.toStdString());
-        processedImage = gray(image);
-        QImage Image = adjustScaleFactor(processedImage, ui->labelImageShow);
-        ui->labelImageShow->setPixmap(QPixmap::fromImage(Image));
-        ui->labelImageShow->setAlignment(Qt::AlignCenter);
-    } else {
-        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开图片！"), QMessageBox::Ok);
-    }
-}
-
-void MainWindow::on_actionMeanFilter_triggered() {
-    if (!srcImagePath.isEmpty()) {
-        imageType = 0;
-        cv::Mat image = cv::imread(srcImagePath.toStdString());
-        processedImage = meanFilter(image);
-        QImage Image = adjustScaleFactor(processedImage, ui->labelImageShow);
-        ui->labelImageShow->setPixmap(QPixmap::fromImage(Image));
-        ui->labelImageShow->setAlignment(Qt::AlignCenter);
-    } else {
-        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开图片！"), QMessageBox::Ok);
-    }
-}
-
-void MainWindow::on_actionEdge_triggered() {
-    if (!srcImagePath.isEmpty()) {
-        imageType = 0;
-        cv::Mat image = cv::imread(srcImagePath.toStdString());
-        processedImage = edgeDetector(image);
-        QImage Image = adjustScaleFactor(processedImage, ui->labelImageShow);
-        ui->labelImageShow->setPixmap(QPixmap::fromImage(Image));
-        ui->labelImageShow->setAlignment(Qt::AlignCenter);
-    } else {
-        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开图片！"), QMessageBox::Ok);
-    }
-}
-
-void MainWindow::on_actionWith_triggered() {
-    if (!srcImagePath.isEmpty()) {
-        imageType = 0;
-        cv::Mat image = cv::imread(srcImagePath.toStdString());
-        processedImage = srcWithEdge(image, 0.5);
-        QImage Image = adjustScaleFactor(processedImage, ui->labelImageShow);
-        ui->labelImageShow->setPixmap(QPixmap::fromImage(Image));
-        ui->labelImageShow->setAlignment(Qt::AlignCenter);
-    } else {
-        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开图片！"), QMessageBox::Ok);
-    }
-}
-
-void MainWindow::on_actionGamma_triggered() {
-    if (!srcImagePath.isEmpty()) {
-        imageType = 0;
-        cv::Mat image = cv::imread(srcImagePath.toStdString());
-        processedImage = gammaTransform(image, 2.0);
-        QImage Image = adjustScaleFactor(processedImage, ui->labelImageShow);
-        ui->labelImageShow->setPixmap(QPixmap::fromImage(Image));
-        ui->labelImageShow->setAlignment(Qt::AlignCenter);
-    } else {
-        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开图片！"), QMessageBox::Ok);
-    }
+void MainWindow::on_actionTool_triggered() {
+    ui->dockWidget->show();
+    ui->dockWidget_2->show();
 }
 
 void MainWindow::on_actionLanguage_triggered() {
@@ -325,7 +269,7 @@ void MainWindow::on_actionAbout_triggered() {
     customMsgBox.setWindowTitle(tr("关于本软件"));
     customMsgBox.setStandardButtons(QMessageBox::Ok);
     customMsgBox.setIconPixmap(QPixmap(":/images/about.png"));
-    customMsgBox.setText(tr("欢迎使用《多功能图像视频处理工具》！本软件具有简单的图像和视频处理功能。\n\n"
+    customMsgBox.setText(tr("欢迎使用CV-PCL Viewer！本软件具有简单的图像和视频处理功能，以及点云可视化和由点云生成网格的功能。\n\n"
                             "——By rmx"));
     customMsgBox.show();
     customMsgBox.exec();
@@ -503,7 +447,7 @@ void MainWindow::on_btnSaveImage_clicked() {
             }
 
             //选择保存路径
-            QString filename = QFileDialog::getSaveFileName(this, tr("保存图片"), "/", tr("*.jpg;; *.jpeg;; *.png;; *.bmp;; *.tif"));
+            QString filename = QFileDialog::getSaveFileName(this, tr("保存图片"), imageDir, tr("*.jpg;; *.jpeg;; *.png;; *.bmp;; *.tif"));
             if (!filename.isEmpty()) {
                 if (!(processedImage.save(filename))) { //保存图像
                     QMessageBox::warning(nullptr, tr("提示"), tr("请先打开图片！"), QMessageBox::Ok);
@@ -517,7 +461,7 @@ void MainWindow::on_btnSaveImage_clicked() {
     } else { //不加水印
         if (!processedImage.isNull()) {
             //选择保存路径
-            QString filename = QFileDialog::getSaveFileName(this, tr("保存图片"), "/", tr("*.jpg;; *.jpeg;; *.png;; *.bmp;; *.tif"));
+            QString filename = QFileDialog::getSaveFileName(this, tr("保存图片"), imageDir, tr("*.jpg;; *.jpeg;; *.png;; *.bmp;; *.tif"));
             if (!filename.isEmpty()) {
                 if (!(processedImage.save(filename))) { //保存图像
                     QMessageBox::warning(nullptr, tr("提示"), tr("图片保存失败！"), QMessageBox::Ok);
@@ -588,7 +532,7 @@ void MainWindow::on_sliderContrast_valueChanged(int value) {
         for (int i = 0; i < image.rows; ++i) {
             for (int j = 0; j < image.cols; ++j) {
                 for (int c = 0; c < 3; ++c) {
-                    image.at<Vec3b>(i, j)[c] = cv::saturate_cast<uchar>((alpha * (image.at<Vec3b>(i, j)[c] - mean.at<double>(c, 0))) + mean.at<double>(c, 0));
+                    image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>((alpha * (image.at<cv::Vec3b>(i, j)[c] - mean.at<double>(c, 0))) + mean.at<double>(c, 0));
                 }
             }
         }
@@ -608,9 +552,9 @@ QImage MainWindow::adjustSaturation(cv::Mat& image, int value) {
     cv::Mat temp = image.clone();
     for (int i = 0; i < image.rows; ++i) {
         for (int j = 0; j < image.cols; ++j) {
-            uchar b = image.at<Vec3b>(i, j)[0];
-            uchar g = image.at<Vec3b>(i, j)[1];
-            uchar r = image.at<Vec3b>(i, j)[2];
+            uchar b = image.at<cv::Vec3b>(i, j)[0];
+            uchar g = image.at<cv::Vec3b>(i, j)[1];
+            uchar r = image.at<cv::Vec3b>(i, j)[2];
             float max = std::max(r, std::max(g, b));
             float min = std::min(r, std::min(g, b));
             float delta, value;
@@ -630,14 +574,14 @@ QImage MainWindow::adjustSaturation(cv::Mat& image, int value) {
                 else
                     alpha = 1 - increment;
                 alpha = 1 / alpha - 1;
-                image.at<Vec3b>(i, j)[2] = static_cast<uchar>(r + (r - L * 255) * alpha);
-                image.at<Vec3b>(i, j)[1] = static_cast<uchar>(g + (g - L * 255) * alpha);
-                image.at<Vec3b>(i, j)[0] = static_cast<uchar>(b + (b - L * 255) * alpha);
+                image.at<cv::Vec3b>(i, j)[2] = static_cast<uchar>(r + (r - L * 255) * alpha);
+                image.at<cv::Vec3b>(i, j)[1] = static_cast<uchar>(g + (g - L * 255) * alpha);
+                image.at<cv::Vec3b>(i, j)[0] = static_cast<uchar>(b + (b - L * 255) * alpha);
             } else {
                 alpha = increment;
-                image.at<Vec3b>(i, j)[2] = static_cast<uchar>(L * 255 + (r - L * 255) * (1 + alpha));
-                image.at<Vec3b>(i, j)[1] = static_cast<uchar>(L * 255 + (g - L * 255) * (1 + alpha));
-                image.at<Vec3b>(i, j)[0] = static_cast<uchar>(L * 255 + (b - L * 255) * (1 + alpha));
+                image.at<cv::Vec3b>(i, j)[2] = static_cast<uchar>(L * 255 + (r - L * 255) * (1 + alpha));
+                image.at<cv::Vec3b>(i, j)[1] = static_cast<uchar>(L * 255 + (g - L * 255) * (1 + alpha));
+                image.at<cv::Vec3b>(i, j)[0] = static_cast<uchar>(L * 255 + (b - L * 255) * (1 + alpha));
             }
         }
     }
@@ -704,7 +648,7 @@ QImage MainWindow::adjustHighlight(cv::Mat& image, int value) {
     for (int i = 0; i < image.rows; ++i) {
         for (int j = 0; j < image.cols; ++j) {
             for (int c = 0; c < 3; ++c) {
-                float temp = pow(float(image.at<Vec3b>(i, j)[c]) / 255.f, 1.0f / midrate.at<float>(i, j)) * (1.0 / (1 - brightrate.at<float>(i, j)));
+                float temp = pow(float(image.at<cv::Vec3b>(i, j)[c]) / 255.f, 1.0f / midrate.at<float>(i, j)) * (1.0 / (1 - brightrate.at<float>(i, j)));
                 if (temp > 1.0f) {
                     temp = 1.0f;
                 }
@@ -712,7 +656,7 @@ QImage MainWindow::adjustHighlight(cv::Mat& image, int value) {
                     temp = 0.0f;
                 }
                 uchar utemp = uchar(255 * temp);
-                image.at<Vec3b>(i, j)[c] = utemp;
+                image.at<cv::Vec3b>(i, j)[c] = utemp;
             }
 
         }
@@ -780,7 +724,7 @@ QImage MainWindow::adjustShadow(cv::Mat& image, int value) {
     for (int i = 0; i < image.rows; ++i) {
         for (int j = 0; j < image.cols; ++j) {
             for (int c = 0; c < 3; ++c) {
-                float temp = pow(float(image.at<Vec3b>(i, j)[c]) / 255.f, 1.0f / midrate.at<float>(i, j)) * (1.0 / (1 - brightrate.at<float>(i, j)));
+                float temp = pow(float(image.at<cv::Vec3b>(i, j)[c]) / 255.f, 1.0f / midrate.at<float>(i, j)) * (1.0 / (1 - brightrate.at<float>(i, j)));
                 if (temp > 1.0f) {
                     temp = 1.0f;
                 }
@@ -788,7 +732,7 @@ QImage MainWindow::adjustShadow(cv::Mat& image, int value) {
                     temp = 0.0f;
                 }
                 uchar utemp = uchar(255 * temp);
-                image.at<Vec3b>(i, j)[c] = utemp;
+                image.at<cv::Vec3b>(i, j)[c] = utemp;
             }
 
         }
@@ -830,9 +774,9 @@ void MainWindow::on_sliderWarm_valueChanged(int value) {
         cv::Mat image = sliderImage.clone();
         for (int i = 0; i < image.rows; ++i) {
             for (int j = 0; j < image.cols; ++j) {
-                image.at<Vec3b>(i, j)[0] = cv::saturate_cast<uchar>(image.at<Vec3b>(i, j)[0] - value);
-                image.at<Vec3b>(i, j)[1] = cv::saturate_cast<uchar>(image.at<Vec3b>(i, j)[1] + value);
-                image.at<Vec3b>(i, j)[2] = cv::saturate_cast<uchar>(image.at<Vec3b>(i, j)[2] + value);
+                image.at<cv::Vec3b>(i, j)[0] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[0] - value);
+                image.at<cv::Vec3b>(i, j)[1] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[1] + value);
+                image.at<cv::Vec3b>(i, j)[2] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[2] + value);
             }
         }
         processedImage = matToQImage(image);
@@ -861,10 +805,6 @@ void MainWindow::on_btnPrev_clicked() {
     QImage images = adjustScaleFactor(image, ui->labelFirst);
     ui->labelFirst->setPixmap(QPixmap::fromImage(images));
     ui->labelFirst->setAlignment(Qt::AlignCenter);
-
-    //状态栏显示图片路径
-    QLabel *label = ui->statusBar->findChild<QLabel *>("status");
-    label->setText(src);
 
     QString src1 = srcImagePathList.at((index + srcImagePathList.size() - 1) % srcImagePathList.size());
     QImage image1(src1);
@@ -898,10 +838,6 @@ void MainWindow::on_btnNext_clicked() {
     ui->labelFirst->setPixmap(QPixmap::fromImage(images));
     ui->labelFirst->setAlignment(Qt::AlignCenter);
 
-    //状态栏显示图片路径
-    QLabel *label = ui->statusBar->findChild<QLabel *>("status");
-    label->setText(src);
-
     QString src1 = srcImagePathList.at((index + 1) % srcImagePathList.size());
     QImage image1(src1);
     QImage Image1 = adjustScaleFactor(image1, ui->labelSecond);
@@ -918,28 +854,31 @@ void MainWindow::on_btnNext_clicked() {
 }
 
 void MainWindow::on_actionVideo_triggered() {
-    videoPath = QFileDialog::getOpenFileName(this, tr("选择视频"), "/", tr("视频(*.WMV *.mp4 *.rmvb *.flv)"));
+    videoPath = QFileDialog::getOpenFileName(this, tr("选择视频"), videoDir, tr("视频(*.WMV *.mp4 *.rmvb *.flv)"));
     if (!videoPath.isEmpty()) {
         //打开视频文件：其实就是建立一个VideoCapture结构
         capture.open(videoPath.toStdString());
         //检测是否正常打开：成功打开时，isOpened返回ture
-        if (!capture.isOpened()) {
+        if (capture.isOpened()) {
+            QFileInfo fileInfo(videoPath);
+            videoDir = fileInfo.path();
+            ui->tabWidget->setCurrentIndex(1);
+            ui->btnPlayStop->setEnabled(true);
+
+            //设置开始帧()
+            long frameToStart = 0;
+            capture.set(cv::CAP_PROP_POS_FRAMES, frameToStart);
+
+            //获取帧率
+            double rate = capture.get(cv::CAP_PROP_FPS);
+            delay = 1000 / rate;
+            timer.start(delay);
+            videoType = 0;
+            isStart = true;
+            ui->btnPlayStop->setIcon(iconStopPlay);
+        } else {
             QMessageBox::warning(nullptr, tr("提示"), tr("打开视频失败！"), QMessageBox::Ok);
         }
-        ui->tabWidget->setCurrentIndex(1);
-        ui->btnPlayStop->setEnabled(true);
-
-        //设置开始帧()
-        long frameToStart = 0;
-        capture.set(CAP_PROP_POS_FRAMES, frameToStart);
-
-        //获取帧率
-        double rate = capture.get(CAP_PROP_FPS);
-        delay = 1000 / rate;
-        timer.start(delay);
-        videoType = 0;
-        isStart = true;
-        ui->btnPlayStop->setIcon(iconStopPlay);
     }
 }
 
@@ -1029,7 +968,7 @@ cv::Mat MainWindow::mosaic(cv::Mat& src) {
             for (int k = i; k < i + arr && k < width; ++k) {
                 for (int m = j; m < j + arr && m < height; ++m) {
                     for (int c = 0; c < 3; ++c) {
-                        src.at<Vec3b>(k, m)[c] = src.at<Vec3b>(i, j)[c];
+                        src.at<cv::Vec3b>(k, m)[c] = src.at<cv::Vec3b>(i, j)[c];
                     }
                 }
             }
@@ -1080,31 +1019,31 @@ QImage MainWindow::matToQImage(const cv::Mat& mat) {
 
 //timer触发函数
 void MainWindow::onTimeout() {
-    double rate = capture.get(CAP_PROP_FPS);
-    double curFrameNumber = capture.get(CAP_PROP_POS_FRAMES);
+    double rate = capture.get(cv::CAP_PROP_FPS);
+    double curFrameNumber = capture.get(cv::CAP_PROP_POS_FRAMES);
     int curTime = curFrameNumber / rate;
-    long totalFrameNumber = capture.get(CAP_PROP_FRAME_COUNT);
+    long totalFrameNumber = capture.get(cv::CAP_PROP_FRAME_COUNT);
     int totalTime = totalFrameNumber / rate;
     ui->labelPlayTime->setText(stom(curTime) + "/" + stom(totalTime));
 
-    Mat frame;
+    cv::Mat frame;
     //读取下一帧
     if (!capture.read(frame)) {
         return;
     }
 
     if (videoType == 1) { //灰度化
-        cvtColor(frame, frame, CV_BGR2GRAY);
+        cv::cvtColor(frame, frame, CV_BGR2GRAY);
     } else if (videoType == 2) { //边缘检测
-        cvtColor(frame, frame, CV_BGR2GRAY);
+        cv::cvtColor(frame, frame, CV_BGR2GRAY);
         //Canny边缘检测
         int edgeThresh = 50;
-        Canny(frame, frame, edgeThresh, edgeThresh * 3, 3);
+        cv::Canny(frame, frame, edgeThresh, edgeThresh * 3, 3);
     } else if (videoType == 3) { //高斯平滑
-        GaussianBlur(frame, frame, Size(9, 9), 0, 0);
+        cv::GaussianBlur(frame, frame, cv::Size(9, 9), 0, 0);
     } else if (videoType == 4) { //二值化
-        cvtColor(frame, frame, CV_BGR2GRAY);
-        adaptiveThreshold(frame, frame, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 31, 6);
+        cv::cvtColor(frame, frame, CV_BGR2GRAY);
+        cv::adaptiveThreshold(frame, frame, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 31, 6);
     } else if (videoType == 5) { //马赛克
         frame = mosaic(frame);
     }
@@ -1120,14 +1059,14 @@ void MainWindow::onTimeout() {
 
 //进度条随视频移动
 void MainWindow::updatePosition() {
-    long totalFrameNumber = capture.get(CAP_PROP_FRAME_COUNT);
+    long totalFrameNumber = capture.get(cv::CAP_PROP_FRAME_COUNT);
     ui->sliderPlay->setMaximum(totalFrameNumber);
-    long frame = capture.get(CAP_PROP_POS_FRAMES );
+    long frame = capture.get(cv::CAP_PROP_POS_FRAMES );
     ui->sliderPlay->setValue(frame);
 }
 
 void MainWindow::on_sliderPlay_valueChanged(int value) {
-    capture.set(CAP_PROP_POS_FRAMES, value);
+    capture.set(cv::CAP_PROP_POS_FRAMES, value);
 }
 
 void MainWindow::on_sliderScaleFactor_valueChanged(int value) {
@@ -1136,5 +1075,239 @@ void MainWindow::on_sliderScaleFactor_valueChanged(int value) {
         ui->labelScaleFactor2->setText(str);
     } else {
         QMessageBox::warning(nullptr, tr("提示"), tr("请先打开视频！"), QMessageBox::Ok);
+    }
+}
+
+void MainWindow::on_actionPointCloud_triggered() {
+    QString filePath = QFileDialog::getOpenFileName(this, tr("选择点云"), toQString(myCloud.fileDir), toQString(fileIO.getInputFormatsStr()));
+    if (!filePath.isEmpty()) {
+        ui->tabWidget->setCurrentIndex(2);
+        viewer->removeAllPointClouds();
+        myCloud.cloud.reset(new PointCloudT);
+        myCloud.mesh.reset(new pcl::PolygonMesh);
+        withMesh = false;
+        QFileInfo fileInfo(filePath);
+        myCloud = fileIO.load(fileInfo);
+        const vector<string> modes = myCloud.supportedModes;
+        if (std::find(modes.begin(), modes.end(), "point") == modes.end()) {
+            ui->btnPoint->setDisabled(true);
+        } else {
+            ui->btnPoint->setDisabled(false);
+        }
+        if (std::find(modes.begin(), modes.end(), "mesh") == modes.end()) {
+            ui->btnMeshSurface->setDisabled(true);
+            ui->btnMeshWire->setDisabled(true);
+        } else {
+            ui->btnMeshSurface->setDisabled(false);
+            ui->btnMeshWire->setDisabled(false);
+        }
+        if (std::find(modes.begin(), modes.end(), "point+mesh") == modes.end()) {
+            ui->btnPointMesh->setDisabled(true);
+        } else {
+            ui->btnPointMesh->setDisabled(false);
+        }
+        if (myCloud.isValid) {
+            myCloud.viewer = viewer;
+            myCloud.show();
+            viewer->resetCamera();
+            ui->labelPointCloud->update();
+            ui->labelPointCloud->renderWindow()->Render();
+        } else {
+            QMessageBox::warning(nullptr, tr("提示"), tr("打开点云失败！"), QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::on_actionSaveCloud_triggered() {
+    if (myCloud.isValid) {
+        bool isSaveBinary = ui->markBinary->isChecked();
+        QString selectedFilter = toQString(fileIO.outputFiltersMap.at(myCloud.fileSuffix));
+        QString saveFilePath = QFileDialog::getSaveFileName(
+            this,  // parent
+            tr("保存点云"),  // caption
+            toQString(myCloud.fileDir),  // dir
+            toQString(fileIO.getOutputFormatsStr()),  // filter
+            &selectedFilter  // selected filter
+            );
+        if (!saveFilePath.isEmpty()) {
+            QFileInfo fileInfo(saveFilePath);
+            string suffix = fromQString(fileInfo.suffix().toLower());
+            const vector<string> modes = myCloud.supportedModes;
+            if (suffix == "obj") {
+                if (isSaveBinary) {
+                    QMessageBox::warning(nullptr, tr("提示"),
+                                         tr("obj文件不支持以二进制形式保存！"),
+                                         QMessageBox::Ok);
+                    return;
+                }
+                if (std::find(modes.begin(), modes.end(), "mesh") == modes.end()) {
+                    QMessageBox::warning(nullptr, tr("提示"),
+                                         tr("obj文件只能以mesh形式保存！"),
+                                         QMessageBox::Ok);
+                    return;
+                }
+            }
+            if (suffix == "ply") {
+                if (std::find(modes.begin(), modes.end(), "mesh") == modes.end()) {
+                    QMessageBox::warning(nullptr, tr("提示"),
+                                         tr("ply文件只能以mesh形式保存！"),
+                                         QMessageBox::Ok);
+                    return;
+                }
+            }
+            bool saveStatus = fileIO.save(myCloud, fileInfo, isSaveBinary);
+            if (!saveStatus) {
+                QMessageBox::warning(nullptr, tr("提示"), tr("点云保存失败！"), QMessageBox::Ok);
+                return;
+            }
+            ui->statusBar->showMessage(tr("点云保存成功！"));
+        }
+    } else {
+        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开点云！"), QMessageBox::Ok);
+    }
+}
+
+void MainWindow::on_btnSaveCloud_clicked() {
+    if (myCloud.isValid) {
+        bool isSaveBinary = ui->markBinary->isChecked();
+        QString selectedFilter = toQString(fileIO.outputFiltersMap.at(myCloud.fileSuffix));
+        QString saveFilePath = QFileDialog::getSaveFileName(
+            this,  // parent
+            tr("保存点云"),  // caption
+            toQString(myCloud.fileDir),  // dir
+            toQString(fileIO.getOutputFormatsStr()),  // filter
+            &selectedFilter  // selected filter
+            );
+        if (!saveFilePath.isEmpty()) {
+            QFileInfo fileInfo(saveFilePath);
+            string suffix = fromQString(fileInfo.suffix().toLower());
+            const vector<string> modes = myCloud.supportedModes;
+            if (suffix == "obj") {
+                if (isSaveBinary) {
+                    QMessageBox::warning(nullptr, tr("提示"),
+                                         tr("obj文件不支持以二进制形式保存！"),
+                                         QMessageBox::Ok);
+                    return;
+                }
+                if (std::find(modes.begin(), modes.end(), "mesh") == modes.end()) {
+                    QMessageBox::warning(nullptr, tr("提示"),
+                                         tr("obj文件只能以mesh形式保存！"),
+                                         QMessageBox::Ok);
+                    return;
+                }
+            }
+            if (suffix == "ply") {
+                if (std::find(modes.begin(), modes.end(), "mesh") == modes.end()) {
+                    QMessageBox::warning(nullptr, tr("提示"),
+                                         tr("ply文件只能以mesh形式保存！"),
+                                         QMessageBox::Ok);
+                    return;
+                }
+            }
+            bool saveStatus = fileIO.save(myCloud, fileInfo, isSaveBinary);
+            if (!saveStatus) {
+                QMessageBox::warning(nullptr, tr("提示"), tr("点云保存失败！"), QMessageBox::Ok);
+                return;
+            }
+            ui->statusBar->showMessage(tr("点云保存成功！"));
+        }
+    } else {
+        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开点云！"), QMessageBox::Ok);
+    }
+}
+
+void MainWindow::on_sliderPointSize_valueChanged(int value) {
+    if (myCloud.isValid) {
+        myCloud.pointSize = value;
+        myCloud.setShowMode("point");
+        ui->labelPointCloud->update();
+        ui->labelPointCloud->renderWindow()->Render();
+        ui->labelPointSize2->setText(QString::number(value));
+    } else {
+        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开点云！"), QMessageBox::Ok);
+    }
+}
+
+void MainWindow::on_btnPoint_clicked() {
+    myCloud.setShowMode("point");
+    ui->labelPointCloud->update();
+    ui->labelPointCloud->renderWindow()->Render();
+}
+
+void MainWindow::on_btnMeshSurface_clicked() {
+    myCloud.setShowMode("mesh");
+    viewer->setRepresentationToSurfaceForAllActors();
+    ui->labelPointCloud->update();
+    ui->labelPointCloud->renderWindow()->Render();
+}
+
+void MainWindow::on_btnMeshWire_clicked() {
+    myCloud.setShowMode("mesh");
+    viewer->setRepresentationToWireframeForAllActors();
+    ui->labelPointCloud->update();
+    ui->labelPointCloud->renderWindow()->Render();
+}
+
+void MainWindow::on_btnPointMesh_clicked() {
+    myCloud.setShowMode("point+mesh");
+    ui->labelPointCloud->update();
+    ui->labelPointCloud->renderWindow()->Render();
+}
+
+void MainWindow::createMesh(PointCloudT::Ptr cloud, pcl::PolygonMesh::Ptr mesh) {
+    // estimate normals
+    pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals(new pcl::PointCloud<pcl::PointNormal>());
+    // Translated point cloud to origin
+    Eigen::Vector4f centroid;
+    pcl::compute3DCentroid(*cloud, centroid);
+
+    Eigen::Affine3f transform = Eigen::Affine3f::Identity();
+    transform.translation() << -centroid[0], -centroid[1], -centroid[2];
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloudTranslated(new pcl::PointCloud<pcl::PointXYZ>());
+    pcl::transformPointCloud(*cloud, *cloudTranslated, transform);
+
+    pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree_for_points(new pcl::search::KdTree<pcl::PointXYZ>);
+    kdtree_for_points->setInputCloud(cloudTranslated);
+
+    pcl::NormalEstimationOMP<pcl::PointXYZ, pcl::Normal> n;
+    pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);
+
+    n.setInputCloud(cloudTranslated);
+    n.setSearchMethod(kdtree_for_points);
+    n.setKSearch(20);
+    n.compute(*normals);
+    pcl::concatenateFields(*cloud, *normals, *cloud_with_normals);
+
+    pcl::Poisson<pcl::PointNormal> poisson;
+    poisson.setDepth(7);
+    poisson.setInputCloud(cloud_with_normals);
+    poisson.setPointWeight(2);
+    poisson.setDegree(2);
+    poisson.setSamplesPerNode(1.5);
+    poisson.setScale(1.1);
+    poisson.setIsoDivide(8);
+    poisson.setConfidence(true);
+    poisson.setOutputPolygons(true);
+    poisson.setManifold(true);
+    poisson.setSolverDivide(8);
+    poisson.reconstruct(*mesh);
+}
+
+void MainWindow::on_btnCreateMesh_clicked() {
+    if (myCloud.isValid) {
+        if (!withMesh) {
+            createMesh(myCloud.cloud, myCloud.mesh);
+            myCloud.supportedModes = {"point", "mesh", "point+mesh"};
+            ui->btnMeshSurface->setDisabled(false);
+            ui->btnMeshWire->setDisabled(false);
+            ui->btnPointMesh->setDisabled(false);
+            withMesh = true;
+            ui->statusBar->showMessage(tr("网格生成成功！"));
+        } else {
+            ui->statusBar->showMessage(tr("网格无需重复生成！"));
+        }
+    } else {
+        QMessageBox::warning(nullptr, tr("提示"), tr("请先打开点云！"), QMessageBox::Ok);
     }
 }
