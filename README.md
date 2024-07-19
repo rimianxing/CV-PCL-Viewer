@@ -10,6 +10,7 @@ Welcome to CV-PCL Viewer! This software has simple image and video processing fu
 
 ### 2. Development environment
 - Windows 11
+- Visual Studio 2019 Community
 - Qt 5.15.2
 - Qt Creator 13.0.2
 - Cmake 3.30.0
@@ -17,9 +18,7 @@ Welcome to CV-PCL Viewer! This software has simple image and video processing fu
 - PCL 1.12.1
 - VTK 9.1.0
 
-You can refer to this article for the installation of the environment: [Installation tutorial (Chinese)](doc/install-zh.md) or [Installation tutorial (English)](doc/install-en.md).
-
->**Note:** when you run this software and find that the video cannot be opened, place these two files (**opencv_ffmpeg.dll** and **opencv_ffmpeg_64.dll**) in the **reference** folder to the OpenCV build folder, such as mine: "D:\opencv-4.0.1\build\3rdparty\ffmpeg", then recompile OpenCV, after that it will work.
+You can refer to this article for the installation of the environment: [Installation tutorial](doc/install.md).
 
 ### 3. Interface display
 The **Show toolbox** button on the top toolbar is used to redisplay the **Toolbox** and **Adjust** side toolbars. The **Switch language** button is used to switch between Chinese and English. Clicking the **About** button will display some information about this software.
@@ -242,7 +241,7 @@ After opening the video, it will automatically start playing, and the progress b
 
 <p align="left">Figure 31. Scaling (2X, 0.5X)</p>
 
-### 5. Point cloud processing
+### 6. Point cloud processing
 
 Some point cloud files are provided in the **clouds** folder for testing, and you can open one of them. Display in point cloud format by default. The point cloud formats that support opening and saving include **ply, pcd, obj**.
 
@@ -300,7 +299,7 @@ There are some precautions when saving point cloud files:
 
 <p align="left">Figure 38. Generate mesh from point cloud</p>
 
-### 6. Acknowledgement
+### 7. Acknowledgement
 
 Many thanks to the authors of [QT5-Image-and-video-processing-software
 ](https://github.com/KyrieFeng23/QT5-Image-and-video-processing-software) and [CloudViewer](https://github.com/nightn/CloudViewer).
