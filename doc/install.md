@@ -83,7 +83,7 @@ Double click the **opencv-4.5.3-vc14_vc15.exe**, extract to the path as shown in
 
 Extract **opencv_contrib-4.5.3.zip** to the path as shown in the figure.
 <div align=center>
-<img src="../img_readme/opencv3.jpg" width="400px">
+<img src="../img_readme/opencv3.jpg" width="600px">
 </div>
 
 Create a new folder named msvc-build.
@@ -93,42 +93,42 @@ Create a new folder named msvc-build.
 
 Open Cmake (cmake-gui), choose the paths, then click the Configure button.
 <div align=center>
-<img src="../img_readme/opencv5.jpg" width="400px">
+<img src="../img_readme/opencv5.jpg" width="600px">
 </div>
 
 Check the configure then click the finish button.
 <div align=center>
-<img src="../img_readme/opencv6.jpg" width="400px">
+<img src="../img_readme/opencv6.jpg" width="600px">
 </div>
 
 There will be some red error messages.
 <div align=center>
-<img src="../img_readme/opencv7.jpg" width="400px">
+<img src="../img_readme/opencv7.jpg" width="600px">
 </div>
 
 Search opencv_extra, change the value.
 <div align=center>
-<img src="../img_readme/opencv8.jpg" width="400px">
+<img src="../img_readme/opencv8.jpg" width="600px">
 </div>
 
 Search nonfree, check the box.
 <div align=center>
-<img src="../img_readme/opencv9.jpg" width="400px">
+<img src="../img_readme/opencv9.jpg" width="600px">
 </div>
 
 Search world, check the box.
 <div align=center>
-<img src="../img_readme/opencv10.jpg" width="400px">
+<img src="../img_readme/opencv10.jpg" width="600px">
 </div>
 
 There will be no more red error messages after clicking the Configure button **twice**, then click the Generate button.
 <div align=center>
-<img src="../img_readme/opencv11.jpg" width="400px">
+<img src="../img_readme/opencv11.jpg" width="600px">
 </div>
 
 Click the Open Project button.
 <div align=center>
-<img src="../img_readme/opencv12.jpg" width="400px">
+<img src="../img_readme/opencv12.jpg" width="600px">
 </div>
 
 Click the batch generation button.
@@ -138,11 +138,11 @@ Click the batch generation button.
 
 Check the box then click the generate button.
 <div align=center>
-<img src="../img_readme/opencv14.jpg" width="400px">
+<img src="../img_readme/opencv14.jpg" width="600px">
 </div>
 
 <div align=center>
-<img src="../img_readme/opencv15.jpg" width="400px">
+<img src="../img_readme/opencv15.jpg" width="600px">
 </div>
 
 Wait for some time until the generation is complete.
@@ -224,7 +224,7 @@ Wait for some time until the installation is complete, then click the finish but
 
 Open **pcl-1.12.1-pdb-msvc2019-win64.zip**, select all these pdb files and extract them to the path as shown in the figure.
 <div align=center>
-<img src="../img_readme/pcl15.jpg" width="400px">
+<img src="../img_readme/pcl15.jpg" width="600px">
 </div>
 
 Copy the **pcl1.12.1.pri** to the path as shown in the figure.
@@ -241,27 +241,27 @@ Delete the VTK folder in the path as shown in the figure.
 
 Extract **VTK-9.1.0.rar** to the path as shown in the figure.
 <div align=center>
-<img src="../img_readme/vtk2.jpg" width="400px">
+<img src="../img_readme/vtk2.jpg" width="600px">
 </div>
 
 ### 7. Configure environment variables
 
 Click the Advanced System Settings button.
 <div align=center>
-<img src="../img_readme/environment1.jpg" width="800px">
+<img src="../img_readme/environment1.jpg" width="1000px">
 </div>
 
 Click the environment variables button.
 <div align=center>
-<img src="../img_readme/environment2.jpg" width="300px">
+<img src="../img_readme/environment2.jpg" width="400px">
 </div>
 
 Choose the Path line, then click the edit button.
 <div align=center>
-<img src="../img_readme/environment3.jpg" width="400px">
+<img src="../img_readme/environment3.jpg" width="500px">
 </div>
 
 Create some new environment variables as follows, then click the confirm button in sequence.
 <div align=center>
-<img src="../img_readme/environment4.jpg" width="400px">
+<img src="../img_readme/environment4.jpg" width="500px">
 </div>
