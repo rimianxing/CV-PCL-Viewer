@@ -18,7 +18,7 @@ Welcome to CV-PCL Viewer! This software has simple image and video processing fu
 - PCL 1.12.1
 - VTK 9.1.0
 
-You can refer to this article for the installation of the environment: [Installation tutorial](doc/install.md).
+You can refer to this article for the installation of the environment: [Installation tutorial](doc/install.md). After installation, git clone this repository and then open **MainWindow.pro** with Qt Creator to run this software.
 
 ### 3. Interface display
 The **Show toolbox** button on the top toolbar is used to redisplay the **Toolbox** and **Adjust** side toolbars. The **Switch language** button is used to switch between Chinese and English. Clicking the **About** button will display some information about this software.
